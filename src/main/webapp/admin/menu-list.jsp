@@ -13,13 +13,34 @@
 <body>
 <div class="navbar">
     <div class="nav-inner">
-        <a class="nav-brand" href="${pageContext.request.contextPath}/admin/dashboard">🍱 MakanMate Admin</a>
+        <a class="nav-brand"
+            href="${pageContext.request.contextPath}/admin/dashboard">
+            <img src="${pageContext.request.contextPath}/assets/images/logo_makanmate.png"
+                alt="MakanMate Logo" class="nav-logo">
+            <span>MakanMate Admin</span>
+        </a>
+
         <div class="nav-links">
-            <a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a>
-            <a href="${pageContext.request.contextPath}/admin/menu">Menu Items</a>
-            <a href="${pageContext.request.contextPath}/admin/orders">Orders</a>
-            <a href="${pageContext.request.contextPath}/admin/customers">Customers</a>
-            <a href="${pageContext.request.contextPath}/logout">Logout</a>
+            <a href="${pageContext.request.contextPath}/admin/dashboard">
+                Dashboard
+            </a>
+
+            <a class="active" href="${pageContext.request.contextPath}/admin/menu">
+                Menu Items
+            </a>
+
+            <a href="${pageContext.request.contextPath}/admin/orders">
+                Orders
+            </a>
+
+            <a href="${pageContext.request.contextPath}/admin/customers">
+                Customers
+            </a>
+
+            <a href="${pageContext.request.contextPath}/logout"
+                onclick="return confirm('Confirm logout from MakanMate?');">
+                Logout
+            </a>
         </div>
     </div>
 </div>

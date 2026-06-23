@@ -15,56 +15,41 @@ public class AdminCustomerServlet extends HttpServlet {
     private final UserDAO userDAO = new UserDAO();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         String action = request.getParameter("action");
+
         try {
-            if ("new".equals(action)) {
-                request.getRequestDispatcher("/admin/customer-form.jsp").forward(request, response);
-            } else if ("edit".equals(action)) {
+            if ("edit".equals(action) || "view".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
-                request.setAttribute("customer", userDAO.findById(id));
+
+                User customer = userDAO.findById(id);
+
+                request.setAttribute("customer", customer);
                 request.getRequestDispatcher("/admin/customer-form.jsp").forward(request, response);
+
             } else if ("delete".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
+
                 userDAO.delete(id);
+
                 response.sendRedirect(request.getContextPath() + "/admin/customers?deleted=1");
+
             } else {
                 request.setAttribute("customers", userDAO.findCustomers());
                 request.getRequestDispatcher("/admin/customers.jsp").forward(request, response);
             }
+
         } catch (Exception e) {
             throw new ServletException(e);
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
-        try {
-            User user = new User();
-            user.setName(request.getParameter("name"));
-            user.setEmail(request.getParameter("email"));
-            user.setPassword(request.getParameter("password"));
-            user.setPhone(request.getParameter("phone"));
-            user.setAddress(request.getParameter("address"));
-            user.setRole("CUSTOMER");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-            if ("update".equals(action)) {
-                user.setId(Integer.parseInt(request.getParameter("id")));
-                userDAO.update(user);
-                response.sendRedirect(request.getContextPath() + "/admin/customers?updated=1");
-            } else {
-                if (userDAO.emailExists(user.getEmail())) {
-                    request.setAttribute("error", "Email already exists.");
-                    request.setAttribute("customer", user);
-                    request.getRequestDispatcher("/admin/customer-form.jsp").forward(request, response);
-                    return;
-                }
-                userDAO.insert(user);
-                response.sendRedirect(request.getContextPath() + "/admin/customers?added=1");
-            }
-        } catch (Exception e) {
-            throw new ServletException(e);
-        }
+        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
     }
 }
